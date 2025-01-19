@@ -99,7 +99,7 @@ try:
         host='localhost',
         user='root',
         database = 'thesis',
-        passwd='',
+        passwd='root',
     )
 
     if db.is_connected():
@@ -113,6 +113,8 @@ try:
         mintime = str(cursor.fetchall()[0][0])
         print(mintime)
 
+        #maxtime='2025-01-01'
+        #mintime='2025-02-01'
         # for newer events
         starttime = ""
         endtime = ""
@@ -306,7 +308,7 @@ try:
                         # Insert data into the database
                         try:
                             print("--else---")
-                            cursor.execute('''INSERT IGNORE INTO events VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)''',
+                            cursor.execute('''INSERT IGNORE INTO events VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)''',
                                     (   d["time"],
                                         d["Mw"],
                                         d["MLh"],
@@ -318,7 +320,6 @@ try:
                                         d["dip"],
                                         d["rake"],
                                         d["mtlist"],
-                                        "TBA",
                                         d["quality"]
                                         )
                                     )

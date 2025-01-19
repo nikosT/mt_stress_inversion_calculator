@@ -383,7 +383,8 @@ def area_selected(areacode):
     print(code)
     from app import mysql
     cursor = mysql.connection.cursor()
-    cursor.execute('''SELECT * FROM events WHERE of_area=%s''', (code,))
+    #cursor.execute('''SELECT * FROM events WHERE of_area=%s''', (code,))
+    cursor.execute('''SELECT * FROM events''')
     
     columns = [column[0] for column in cursor.description]  # Get column names
     
@@ -424,7 +425,7 @@ def geojson_selected():
     from app import mysql
     cursor = mysql.connection.cursor()
     try:
-        cursor.execute('''SELECT longitude,latitude,id,of_area FROM events''')
+        cursor.execute('''SELECT longitude,latitude,id FROM events''')
         coordinates = cursor.fetchall()
         
         area_belong = ""
@@ -438,7 +439,7 @@ def geojson_selected():
                 if polygon.contains(point):
                     area_belong = feature['properties']['code']
                     print(area_belong)
-                    cursor.execute("UPDATE events SET of_area = %s WHERE id = %s", (str(area_belong),row[2]))
+                    cursor.execute("UPDATE events WHERE id = %s", (str(area_belong),row[2]))
                     print("The event ("+ row[2] +") belongs to the :", area_belong)
                     # mysql.connection.commit()
                 # else:
@@ -760,14 +761,32 @@ def averageMT():
 
 # to get stress inversion from Stressinverse 
 @views.route("/stressinverse",methods=["GET", "POST"])
+@views.route("/stressinverse", methods=["POST"])
 def stressinverse():
-    if request.method == "GET":
-        with open("./Stressinverse/Programs_PYTHON/StressInverse.py") as infile:
-            print("---exec file now")
-            exec(infile.read())
-            
-    return redirect(url_for('views.str_beachball'))
-
+    try:
+        print("--- Running stress inversion using subprocess ---")
+        
+        # Define the command to run the StressInverse.py script
+        script_path = "./Stressinverse/Programs_PYTHON/StressInverse.py"
+        command = ["python", script_path]
+        
+        # Run the script with subprocess and capture output
+        process = subprocess.run(command, capture_output=True, text=True)
+        
+        # Check if the script executed successfully
+        if process.returncode == 0:
+            # Return the output of the script as the response
+            return jsonify({"status": "success", "message": process.stdout.strip()}), 200
+        else:
+            # Return the error output if the script failed
+            return jsonify({
+                "status": "error", 
+                "message": process.stderr.strip()
+            }), 500
+    except Exception as e:
+        print(f"Error during subprocess execution: {e}")
+        # Return an error response for unexpected exceptions
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 # to get stress inversion from Stressinverse and create its beachball 
 @views.route("/str_beachball",methods=["GET", "POST"])

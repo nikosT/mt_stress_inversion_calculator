@@ -119,7 +119,7 @@ function updateMap() {
 
     // show beachballs of all events
     $.ajax({
-        url: "http://localhost:8000/allevents",
+        url: "http://localhost:5000/allevents",
         dataType: "json",
         
         success: function (result) {
@@ -384,7 +384,7 @@ $(document).on('submit', '#filter', function (e) {
     e.preventDefault();
     $.ajax({
         type: 'POST',
-        url: "http://localhost:8000/filter_events",
+        url: "http://localhost:5000/filter_events",
         data: {
             starttime: $("#starttime").val(),
             endtime: $("#endtime").val(),
@@ -618,7 +618,7 @@ $(document).on('submit', '#filterlistform', function (e) {
 
     $.ajax({
         type: 'POST',
-        url: "http://localhost:8000/averageMT",
+        url: "http://localhost:5000/averageMT",
         contentType: "application/json",
         // data: JSON.stringify({"data": data}),
         data: JSON.stringify({ "data": ids, "filter": filter }),
@@ -664,7 +664,7 @@ $(document).on('submit', '#arealistform', function (e) {
     // to calculate the average MT
     $.ajax({
         type: 'POST',
-        url: "http://localhost:8000/averageMT",
+        url: "http://localhost:5000/averageMT",
         contentType: "application/json",
         data: JSON.stringify({ "data": ids, "code": String(areacode) }),
         
@@ -713,12 +713,12 @@ function Export() {
 
     // Prepare the image URLs (replace with your actual image URLs)
     const imageUrls = [
-        "http://localhost:8000/static/Figures/P_T_axes.png",
-        "http://localhost:8000/static/Figures/Mohr_circles.png",
-        "http://localhost:8000/static/Figures/stress_directions.png",
-        "http://localhost:8000/static/Figures/shape_ratio.png",
-        "http://localhost:8000/static/Figures/red.png",
-        "http://localhost:8000/static/Figures/blue.png",
+        "http://localhost:5000/static/Figures/P_T_axes.png",
+        "http://localhost:5000/static/Figures/Mohr_circles.png",
+        "http://localhost:5000/static/Figures/stress_directions.png",
+        "http://localhost:5000/static/Figures/shape_ratio.png",
+        "http://localhost:5000/static/Figures/red.png",
+        "http://localhost:5000/static/Figures/blue.png",
     ];
 
 
