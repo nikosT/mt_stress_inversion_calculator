@@ -42,3 +42,4 @@ flask run --debug
 ```
 
 If it takes too long because it loads all old events found, you should limit it accordingly at obs.py file lines 116, 117.
+If duplicated MTs, do in terminal `docker compose down; docker compose up -d`
